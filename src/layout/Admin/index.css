@@ -1,0 +1,7 @@
+.admin{
+    position: absolute;
+    width: 100%;
+}
+.content{
+    min-height: 100vh;
+}
