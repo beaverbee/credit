@@ -1,0 +1,13 @@
+.admin-list{
+    width: 100%;
+
+}
+
+.admin-list-table{
+    margin: 0 10px;
+}
+
+.admin-list-query{
+    margin-bottom: 10px;
+    height: 40px;
+}

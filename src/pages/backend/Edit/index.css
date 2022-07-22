@@ -1,0 +1,58 @@
+.edit-body {
+
+    width: 100%;
+    display: flex;
+   
+}
+
+.edit-data {
+    flex: 0 0 600px;
+}
+
+.edit-picture{
+  flex: 0 0 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.edit-page{
+    width: 100%;
+    border: 3px solid rgb(36, 32, 32);
+    border-radius: 20px;
+    background-color: rgba(255, 255,255,0.9 );
+    margin: 0 20px;
+    height: 600px;
+    padding-top: 20px;
+    height: 600px;
+}
+
+.picture-box{
+    position: relative;
+    width: 600px;
+    height: 80px;
+
+}
+
+
+
+.picture-title{
+    position: relative;
+    right:215px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.ant-upload-list{
+    display: inline-block;
+    width: 200px;
+    height: 150px;
+}
+
+.ant-upload{
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+   
+}

@@ -1,0 +1,101 @@
+卷 LENOVO 的文件夹 PATH 列表
+卷序列号为 105E-F40E
+D:.
+│  App.css
+│  App.js
+│  index.css
+│  index.js
+│  logo.svg
+│  tree.txt
+│  
+├─assets
+│      background.jpg
+│      background2.jpg
+│      background3.png
+│      background4.png
+│      background5.png
+│      default.webp
+│      logo.jpg
+│      logo.png
+│      
+├─components
+│  ├─GameItem
+│  │      index.css
+│  │      index.jsx
+│  │      
+│  └─Person
+│          index.css
+│          index.jsx
+│          
+├─config
+│      index.js
+│      
+├─layout
+│  └─Admin
+│      │  index.css
+│      │  index.jsx
+│      │  
+│      ├─header
+│      │      index.css
+│      │      index.jsx
+│      │      
+│      └─leftNav
+│              index.css
+│              index.jsx
+│              
+├─pages
+│  ├─Backend
+│  │  │  index.jsx
+│  │  │  
+│  │  ├─Edit
+│  │  │      index.css
+│  │  │      index.jsx
+│  │  │      
+│  │  ├─List
+│  │  │      index.css
+│  │  │      index.jsx
+│  │  │      
+│  │  └─Log
+│  │          index.css
+│  │          index.jsx
+│  │          
+│  ├─Home
+│  │  │  index.css
+│  │  │  index.jsx
+│  │  │  
+│  │  ├─Detail
+│  │  │      index.css
+│  │  │      index.jsx
+│  │  │      
+│  │  ├─Game
+│  │  │      index.css
+│  │  │      index.jsx
+│  │  │      
+│  │  └─GameList
+│  │          index.css
+│  │          index.jsx
+│  │          
+│  └─User
+│      │  index.css
+│      │  index.jsx
+│      │  
+│      ├─Login
+│      │      index.css
+│      │      index.jsx
+│      │      
+│      ├─Register
+│      │      index.css
+│      │      index.jsx
+│      │      
+│      └─Update
+│              index.css
+│              index.jsx
+│              
+├─routers
+│      index.js
+│      
+└─utils
+        axios.js
+        index.js
+        storage.js
+        

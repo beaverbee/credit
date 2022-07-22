@@ -1,22 +1,73 @@
 /** @format */
 
 import React from "react";
-import { useEffect } from "react";
-import { Input, Form, Select, Button } from "antd";
+import { useRef } from "react";
+import { Input, Form, Select, Button, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import "./index.css";
+import { nanoid } from "nanoid";
+import axios from "../../../utils/axios";
+import qs from "qs";
+import md5 from "md5";
 const { Option } = Select;
 
 export default function Register() {
 	const navigate = useNavigate();
 	const [form] = Form.useForm();
-	async function handleRegister() {}
-	useEffect(() => {
-		async function getUser() {
-			return { username: "123" };
-		}
-		getUser();
-	}, []);
+	const kaptchaRef = useRef();
+	async function handleRegister() {
+		form
+			.validateFields()
+			.then((value) => {
+				if (value.password !== value.repassword) {
+					return Promise.reject("两次输入密码不一致");
+				} else {
+					return value;
+				}
+			})
+			.then((value) => {
+				return axios.get(`/user/repeat/${value.username}`);
+			})
+			.then((value) => {
+				console.log(value.data);
+				if (value.status && value.data) {
+					const { username, password, nickname, sexal, phone } =
+						form.getFieldsValue();
+					const user = {
+						username,
+						password: md5(password),
+						nickname,
+						sexal,
+						phone,
+						id: nanoid(),
+						label: 1,
+					};
+					return axios.post("/user/register", qs.stringify(user));
+				} else {
+					return Promise.reject("用户名重复");
+				}
+			})
+			.then((value) => {
+				if (value.status === 1 && value.data) {
+					message.success("用户注册成功请登录");
+					navigate("/user/login");
+				} else {
+					return Promise.reject();
+				}
+			})
+			.catch((e) => {
+				if (typeof e === "string") {
+					message.error(e);
+				} else {
+					message.error("Oops Something Wrong");
+				}
+				console.log(e);
+			});
+	}
+	const changeKaptcha = () => {
+		kaptchaRef.current.src = "/kaptcha";
+	};
+
 	return (
 		<div className="register-box">
 			<Form
@@ -53,7 +104,7 @@ export default function Register() {
 						},
 					]}
 				>
-					<Input />
+					<Input.Password />
 				</Form.Item>
 				<Form.Item
 					label="再次输入密码"
@@ -66,7 +117,7 @@ export default function Register() {
 						},
 					]}
 				>
-					<Input />
+					<Input.Password />
 				</Form.Item>
 				<Form.Item
 					label="昵称"
@@ -110,7 +161,34 @@ export default function Register() {
 						<Option value="female">女</Option>
 					</Select>
 				</Form.Item>
+				<Form.Item
+					label="验证码"
+					name="kaptcha"
+					className="form-item"
+					labelCol={{
+						span: 8,
+					}}
+					wrapperCol={{
+						span: 6,
+					}}
+					rules={[
+						{
+							required: true,
+							message: "请输入验证码",
+						},
+					]}
+				>
+					<Input></Input>
+				</Form.Item>
 			</Form>
+			<img
+				alt="1"
+				src="/kaptcha"
+				title="点击换图"
+				className="update-kaptcha"
+				onClick={changeKaptcha}
+				ref={kaptchaRef}
+			></img>
 			<div className="bottom-div">
 				<Button type="primary" className="button" onClick={handleRegister}>
 					注册

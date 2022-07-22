@@ -4,4 +4,6 @@
 }
 .content{
     min-height: 100vh;
+    background: url("../../assets/background5.png") no-repeat;
+    background-size: contain;
 }

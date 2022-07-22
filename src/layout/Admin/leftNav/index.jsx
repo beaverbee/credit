@@ -3,7 +3,7 @@
 import React from "react";
 import { menusList } from "../../../config";
 import { useLocation, useNavigate } from "react-router-dom";
-import logo from "../../../assets/logo.png";
+import logo from "../../../assets/logo.jpg";
 import "./index.css";
 
 export default function LeftNav() {

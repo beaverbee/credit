@@ -2,20 +2,20 @@
 
 import React from "react";
 import { Fragment, useEffect, useState } from "react";
-import { Divider, Dropdown, Menu } from "antd";
+import { Divider, Dropdown, Menu, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { DownOutlined } from "@ant-design/icons";
 import { removeUser } from "../../utils/storage";
+import { getUser } from "../../utils/storage";
+import axios from "../../utils/axios";
+import qs from "qs";
 import "./index.css";
 
-export default function Person(props) {
-	const { id } = props;
+export default function Person() {
 	const [user, setUser] = useState({});
-
 	const navigate = useNavigate();
-
 	const handleUpdate = () => {
-		navigate("/user/update", { id });
+		navigate("/user/update", { id: user.id });
 	};
 	const handleLogout = () => {
 		removeUser();
@@ -23,7 +23,20 @@ export default function Person(props) {
 	};
 	const handleCancel = () => {
 		// do something
-		navigate("/user/register");
+		axios
+			.post("/user/delete", qs.stringify({ id: user.id }))
+			.then((value) => {
+				if (value.status === 1 && value.data) {
+					message.success("注销成功");
+					removeUser();
+					navigate("/user/register");
+				} else {
+					return Promise.reject();
+				}
+			})
+			.catch(() => {
+				message.error("Oops something error");
+			});
 	};
 
 	const dropDown = (
@@ -57,18 +70,28 @@ export default function Person(props) {
 			]}
 		></Menu>
 	);
+
 	useEffect(() => {
-		async function getUserMessage(id) {
-			setUser({ username: "admin" });
-			return;
+		async function getUserMessage() {
+			setUser(getUser());
 		}
-		getUserMessage(1);
-	}, [id]);
+		getUserMessage();
+	}, []);
 	return (
 		<Fragment>
 			<div className="person-header">
 				<span className="header-title">集卡游戏</span>
 				<div className="header-menu">
+					{getUser() && getUser().label === 0 ? (
+						<span
+							onClick={() => {
+								navigate("/admin");
+							}}
+							style={{ marginRight: "10px", cursor: "pointer" }}
+						>
+							进入后台
+						</span>
+					) : undefined}
 					<Dropdown overlay={dropDown}>
 						<span className="menu-item">
 							您好 {user.username} <DownOutlined></DownOutlined>

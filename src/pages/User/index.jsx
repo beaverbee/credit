@@ -15,7 +15,7 @@ export default function User() {
 	return (
 		<div className="content-box">
 			<div className="header">
-				<Divider orientationMargin={50} className="divider">
+				<Divider orientationMargin={20} className="divider">
 					<span className="header-title">招商银行 · 集卡活动</span>
 				</Divider>
 			</div>

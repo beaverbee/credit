@@ -1,53 +1,68 @@
 /** @format */
 
 import React from "react";
-import { List } from "antd";
+import { useEffect, useState } from "react";
+import { List, message, Spin } from "antd";
+import { getUser } from "../../../utils/storage";
+import axios from "../../../utils/axios";
 import GameItem from "../../../components/GameItem";
 import "./index.css";
-
-const data = [
-	{
-		id: "1",
-		gamename: "g1",
-		starttime: "2022/7/1",
-		endtime: "2022/8/1",
-		title: "welcome to g1",
-		enable: true,
-	},
-	{
-		id: "2",
-		gamename: "g2",
-		starttime: "2022/7/2",
-		endtime: "2022/8/2",
-		title: "welcome to g2",
-		enable: true,
-	},
-	{
-		id: "3",
-		gamename: "g3",
-		starttime: "2022/7/3",
-		endtime: "2022/8/3",
-		title: "welcome to g3",
-		enable: false,
-	},
-];
+import moment from "moment";
 
 export default function GameList() {
+	const [gameList, setGameList] = useState([]);
+	const [loading, setLoading] = useState(true);
+	useEffect(() => {
+		function getGameList() {
+			let game = [];
+			axios
+				.get(`/card/alllist/1/${moment().format("YYYY-MM-DD")}`)
+				.then((value) => {
+					if (value.status === 1 && value.data) {
+						game = value.data.map((item) => {
+							const { id, gamename, starttime, endtime } = item;
+							return { id, gamename, starttime, endtime, enable: false };
+						});
+						return axios.get(`/config/userlist/${getUser().id}`);
+					} else {
+						return Promise.reject();
+					}
+				})
+				.then((value) => {
+					if (value.status === 1) {
+						for (let i = 0; i < value.data.length; i++) {
+							game.find(
+								(item) => item.id === value.data[i].gameid
+							).enable = true;
+						}
+
+						setGameList(game);
+					} else {
+						return Promise.reject();
+					}
+					setLoading(false);
+				})
+				.catch((e) => {
+					message.error("Oops! something wrong");
+					console.log(e);
+				});
+		}
+		getGameList();
+	}, [setLoading]);
 	return (
-		<List
-			itemLayout="horizontal"
-			dataSource={data}
-			pagination={{
-				onChange: (page) => {
-					console.log(page);
-				},
-				pageSize: 4,
-			}}
-			renderItem={(item) => (
-				<List.Item>
-					<GameItem game={item}></GameItem>
-				</List.Item>
-			)}
-		/>
+		<Spin size="large" tip="加载中" spinning={loading}>
+			<List
+				itemLayout="horizontal"
+				dataSource={gameList}
+				pagination={{
+					pageSize: 4,
+				}}
+				renderItem={(item) => (
+					<List.Item>
+						<GameItem game={item}></GameItem>
+					</List.Item>
+				)}
+			/>
+		</Spin>
 	);
 }
